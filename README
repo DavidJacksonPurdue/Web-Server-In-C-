@@ -1,13 +1,24 @@
-All portions of part 1 are finished. All http tests were performed on chrome.
-All https tests were performed using Microsoft Edge. For part 2, everything
-except part 2.5 (the directory browsing) has been completed. For part 2.4, as
-extra credit, the stats and logs responses work for the linear, thread and pool
-of threads options. The stats and logs pages, however, do not work for the fork
-option. All valid user name and password combninations are stored in
-"authorized_users_in_text.txt" No known memory leak or file descriptor leaks
-occur.
+This is another school project to create an http/https webserver in c++. Run myhttpd in the root directory to start the server, you will need to specify a port number (use 80
+for the default port used by web browsers). By default, the program runs an http server that linearly responds to all requests with a single open and closed tcp connection, other
+modes are offered for efficiency. There is no set IP used by the server, the IP the server uses is whatever public IP your machine is using.
 
-**Important Note: I do not have firefox on my computer, and have therefore
-  not done any tests with it. Google Chrome is known to work with everything
-  except https, which instead uses Microsoft Edge. Please use either of
-  these browsers for the purpose of testing**
+Run the program with the flag -f to make the server fork a new process for every request. Run the program with the flag -t to make the server start a new thread for every request.
+Run the program with the flag -p and a number to make the server run a new thread with every request up to a specified concurrency limit (acting as a means to counteract a DDOS 
+attack). You can only specifiy one concurrency mode, leave blank if linear execution is sufficient. Run the program with the flag -s to run the server as an https server. The
+private certification key that was used was removed prior to uploading this project to github, so if run as an https web server, it is likely that only clients using the Microsoft
+Edge or Internet Explorer web browsers would be able to communicate with this server. To fix this, you will need to reperform the steps to obtain a certification key.
+Run the program with the flag -h to get usage help. 
+
+The server has a simple account authorization feature, so only specified users saved in the route directory can make requests to the server. The username/password pairs are saved
+as plain text in the authorized_users_in_text file in the form username:password. This entire string will need to be translated to base64 and saved in the corresponding base64
+text file for the server to recognize the authorized user. 
+
+The server can interpret and respond to direct requests, html files (provided they reference files the server possesses of course), and cgi-bin scripts. Files that the server can
+fetch are located in the http-root-dir directory. The server will block any request to an upper lever directory. 
+
+The server maintains a log file of all requests recieved since startup in the myhttpd.log text file. Additionally, this log can be viewed in the browser with the route /logs
+
+The server additionally maintains stats about performance such as average response time, quickest response time, longest response time, total requests recieved, etc. since startup.
+This information can be viewed in browser with the route /stats
+
+There are no known bugs with the program.
